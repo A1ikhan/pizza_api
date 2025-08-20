@@ -1,7 +1,7 @@
+from enum import Enum
 from typing import List, Optional
 from ninja import ModelSchema, Schema
 from .models import Restaurant, Chef, Pizza, Ingredient, Review
-
 
 class RestaurantIn(Schema):
     name: str
@@ -33,12 +33,26 @@ class IngredientOut(ModelSchema):
     class Config:
         model = Ingredient
         model_fields = ['id', 'name']
+class DoughType(str, Enum):
+    THIN = "thin"
+    CLASSIC = "classic"
+    THICK = "thick"
+
+    @property
+    def display_name(self) -> str:
+        """Возвращает человекочитаемое название"""
+        display_map = {
+            DoughType.THIN: "Тонкое",
+            DoughType.CLASSIC: "Классическое",
+            DoughType.THICK: "Пышное"
+        }
+        return display_map[self]
 
 
 class PizzaIn(Schema):
     name: str
     cheese_type: str
-    dough: str
+    dough: DoughType
     secret_ingredient: str
     restaurant_id: int
     ingredient_ids: List[int] = []
@@ -72,9 +86,16 @@ class ReviewOut(ModelSchema):
         return obj.restaurant.name
 
 
+
 class MenuItem(Schema):
     id: int
     name: str
     cheese_type: str
-    dough: str
+    dough: DoughType
+    dough_display: str
     ingredients: List[str]
+
+    @staticmethod
+    def resolve_dough_display(obj: 'Pizza') -> str:
+        """Резолвер для человекочитаемого названия теста"""
+        return obj.get_dough_display()

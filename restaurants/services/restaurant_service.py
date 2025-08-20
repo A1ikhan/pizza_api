@@ -1,7 +1,7 @@
 from typing import List
 from django.shortcuts import get_object_or_404
 from ..models import Restaurant, Chef, Review
-from ..schemas import RestaurantIn, ChefIn, ReviewIn
+from ..schemas import RestaurantIn, ChefIn, ReviewIn, MenuItem, DoughType
 
 
 class RestaurantService:
@@ -42,12 +42,15 @@ class MenuService:
 
         menu_items = []
         for pizza in pizzas:
-            menu_items.append({
-                "id": pizza.id,
-                "name": pizza.name,
-                "cheese_type": pizza.cheese_type,
-                "dough": pizza.get_dough_display(),
-                "ingredients": [i.name for i in pizza.ingredients.all()]
-            })
+
+            menu_item = MenuItem(
+                id=pizza.id,
+                name=pizza.name,
+                cheese_type=pizza.cheese_type,
+                dough=DoughType(pizza.dough),
+                ingredients=[i.name for i in pizza.ingredients.all()]
+            )
+
+            menu_items.append(menu_item)
 
         return menu_items
