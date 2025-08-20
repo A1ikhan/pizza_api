@@ -2,3 +2,5 @@
 .dockerignore
 db.sqlite3
 __pycache__/
+# Django static files
+/staticfiles/
