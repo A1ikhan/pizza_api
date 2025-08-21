@@ -40,7 +40,7 @@ class DoughType(str, Enum):
 
     @property
     def display_name(self) -> str:
-        """Возвращает человекочитаемое название"""
+
         display_map = {
             DoughType.THIN: "Тонкое",
             DoughType.CLASSIC: "Классическое",
@@ -56,6 +56,7 @@ class PizzaIn(Schema):
     secret_ingredient: str
     restaurant_id: int
     ingredient_ids: List[int] = []
+
 
 
 class PizzaOut(ModelSchema):
@@ -85,8 +86,6 @@ class ReviewOut(ModelSchema):
     def resolve_restaurant_name(obj):
         return obj.restaurant.name
 
-
-
 class MenuItem(Schema):
     id: int
     name: str
@@ -97,5 +96,5 @@ class MenuItem(Schema):
 
     @staticmethod
     def resolve_dough_display(obj: 'Pizza') -> str:
-        """Резолвер для человекочитаемого названия теста"""
+
         return obj.get_dough_display()

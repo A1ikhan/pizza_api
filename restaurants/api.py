@@ -53,6 +53,7 @@ def update_pizza(request, pizza_id: int, payload: PizzaIn):
     return PizzaService.update_pizza(pizza_id, payload)
 
 
+
 @api.delete("/pizzas/{pizza_id}/")
 def delete_pizza(request, pizza_id: int):
     PizzaService.delete_pizza(pizza_id)
